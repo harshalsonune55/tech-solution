@@ -1,0 +1,53 @@
+
+
+
+
+
+.main-background{
+    width: 100%;
+    height: 104vh;
+    z-index: -1;
+    position: absolute;
+}
+#nav{
+    position:relative;
+    color: white;
+    background-color: rgb(12, 8, 8);
+
+}
+.overlap-text h1{
+    position: absolute;
+    z-index: 1;
+    color: white;
+    font-size: 94px;
+    margin-top: 103px;
+    margin-left: 486px;
+}
+.overlap-text p{
+    color: white;
+    margin-top: 221px;
+    margin-left: 399px;
+    position: absolute;
+    font-size: 35px;
+    font-family: "Oswald" ;
+}
+.search input{
+    /* margin-left: 625px; */
+    margin-top: 306px;
+    border: 2px solid black;
+    border-radius: 23px;
+    padding: 5px;
+    padding-left: 159px;
+    padding-right: 159px;
+    margin-left: 459px;
+    margin-left: 63px;
+    margin-right: 124px;
+
+
+}
+.search button{
+    padding: 6px;
+    border-radius: 25%
+    height: 37px;
+    margin-top: 308px;
+}

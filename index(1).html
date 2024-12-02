@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Custom Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <title>TechMech! - The Solution for Technical Problems</title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nav">
+        <a class="navbar-brand" href="#">
+            <img src="idea.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            TechMech
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Features</a>
+                <a class="nav-item nav-link" href="#">Pricing</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Background Image and Text -->
+    <div class="image-container">
+        <img src="background(1).jpg" class="main-background img-fluid" alt="TechMech Background">
+    </div>
+    <div class="overlap-text text-center text-white">
+        <h1>Hello there!!</h1>
+        <p>Here is the solution for all your tech problems!</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="container mt-5">
+        <div class="search input-group mb-3">
+            <input type="text" id="searchQuery" class="form-control" placeholder="Enter your problem...">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" onclick="handleSearch()">Search</button>
+            </div>
+        </div>
+
+        <!-- Video Results Section -->
+        <div id="videoResults" class="container"></div>
+    </div>
+
+    <!-- Bootstrap and jQuery Scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // YouTube API Search Function
+        async function searchVideos(query) {
+            const apiKey = 'AIzaSyDqS2AoyDCRPOPmRzdCWFVYUt5sN5XBf5E'; // Replace with your YouTube API key
+            const maxResults = 6; // Number of video results to fetch
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${maxResults}&key=${apiKey}`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+                return data.items; // This contains the list of video results
+            } catch (error) {
+                console.error('Error fetching videos:', error);
+            }
+        }
+
+        // Handle the search query and display video results
+        function handleSearch() {
+            const query = document.getElementById('searchQuery').value; // Get the query from the input field
+            if (!query) {
+                alert("Please enter a search query.");
+                return;
+            }
+
+            // Call the searchVideos function and display results
+            searchVideos(query).then(videos => {
+                const resultsContainer = document.getElementById('videoResults');
+                resultsContainer.innerHTML = ''; // Clear previous results
+
+                let rowElement = null;
+
+                // Loop through the video results and display them in rows of 3
+                videos.forEach((video, index) => {
+                    if (index % 3 === 0) {
+                        // Create a new row for every 3 videos
+                        rowElement = document.createElement('div');
+                        rowElement.classList.add('row', 'mt-4');
+                        resultsContainer.appendChild(rowElement);
+                    }
+
+                    const videoElement = document.createElement('div');
+                    videoElement.classList.add('col-md-4', 'mb-4'); // Bootstrap grid class for 3 cards per row
+                    videoElement.innerHTML = `
+                        <div class="card">
+                            <img src="${video.snippet.thumbnails.medium.url}" class="card-img-top" alt="${video.snippet.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${video.snippet.title}</h5>
+                                <p class="card-text">${video.snippet.description}</p>
+                                <a href="https://www.youtube.com/watch?v=${video.id.videoId}" target="_blank" class="btn btn-primary">Watch Video</a>
+                            </div>
+                        </div>
+                    `;
+                    rowElement.appendChild(videoElement);
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
